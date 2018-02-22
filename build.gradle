@@ -1,0 +1,21 @@
+apply from: '../RLibrary/lib.gradle'
+
+// 请将以下代码, 同时复制到APP的gradle文件中
+android {
+    defaultConfig {
+        manifestPlaceholders = [
+                //环信 应用标识(AppKey)
+                EASEMOB_APPKEY: "1138161030115585#letter"
+        ]
+    }
+
+    //记得调用 REM.init() 方法哦
+
+    useLibrary 'org.apache.http.legacy'
+}
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+
+    //api 'com.google.android.gms:play-services-gcm:9.4.0'
+    //api 'com.hyphenate:hyphenate-sdk:3.3.9'
+}

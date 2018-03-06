@@ -2,13 +2,10 @@ package com.angcyo.hyphenate;
 
 import android.app.Application;
 
-import com.angcyo.library.utils.L;
 import com.angcyo.uiview.net.Func;
 import com.angcyo.uiview.net.RException;
 import com.angcyo.uiview.net.RSubscriber;
 import com.angcyo.uiview.net.Rx;
-import com.angcyo.uiview.utils.ThreadExecutor;
-import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.exceptions.HyphenateException;
@@ -37,12 +34,17 @@ public class REM {
         // 是否自动下载附件类消息的缩略图等，默认为 true 这里和上边这个参数相关联
         options.setAutoDownloadThumbnail(true);
 
+        options.setAutoLogin(true);
+
         //初始化
         EMClient.getInstance().init(application, options);
         //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
         EMClient.getInstance().setDebugMode(debug);
     }
 
+    /**
+     * 注册账号
+     */
     public static Observable register(final String username, final String pwd) {
         return Rx.create(new Func<String>() {
             @Override
@@ -57,42 +59,39 @@ public class REM {
         });
     }
 
+    /**
+     * 登录接口
+     */
     public static void login(final String username, final String pwd, final RSubscriber<String> subscriber) {
         subscriber.onStart();
-        EMClient.getInstance().login(username, pwd, new EMCallBack() {//回调
+        EMClient.getInstance().login(username, pwd, new REMCallBack() {
             @Override
-            public void onSuccess() {
-                EMClient.getInstance().groupManager().loadAllGroups();
-                EMClient.getInstance().chatManager().loadAllConversations();
-
-                ThreadExecutor.instance().onMain(new Runnable() {
-                    @Override
-                    public void run() {
-                        subscriber.onCompleted();
-                        subscriber.onNext("");
-                    }
-                });
+            public void onResult(boolean isError, int code, String message) {
+                if (isError) {
+                    subscriber.onError(new RException(code, message));
+                } else {
+                    EMClient.getInstance().groupManager().loadAllGroups();
+                    EMClient.getInstance().chatManager().loadAllConversations();
+                    subscriber.onNext("");
+                    subscriber.onCompleted();
+                }
             }
+        });
+    }
 
+    /**
+     * 登出
+     */
+    public static void logout(final RSubscriber<String> subscriber) {
+        EMClient.getInstance().logout(true, new REMCallBack() {
             @Override
-            public void onProgress(int progress, String status) {
-                L.e("onProgress() -> " + progress + " " + status);
-                ThreadExecutor.instance().onMain(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onError(final int code, final String message) {
-                ThreadExecutor.instance().onMain(new Runnable() {
-                    @Override
-                    public void run() {
-                        subscriber.onError(new RException(code, message));
-                    }
-                });
+            public void onResult(boolean isError, int code, String message) {
+                if (isError) {
+                    subscriber.onError(new RException(code, message));
+                } else {
+                    subscriber.onNext("");
+                    subscriber.onCompleted();
+                }
             }
         });
     }

@@ -1,6 +1,6 @@
 apply from: '../RLibrary/lib.gradle'
 
-// 请将以下代码, 同时复制到APP的gradle文件中
+// 如果出错, 请将以下代码, 同时复制到APP的gradle文件中
 android {
     defaultConfig {
         manifestPlaceholders = [

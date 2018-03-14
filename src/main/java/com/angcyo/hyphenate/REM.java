@@ -70,8 +70,7 @@ public class REM {
                 if (isError) {
                     subscriber.onError(new RException(code, message));
                 } else {
-                    EMClient.getInstance().groupManager().loadAllGroups();
-                    EMClient.getInstance().chatManager().loadAllConversations();
+                    initOnLoggedIn();
                     subscriber.onNext("");
                     subscriber.onCompleted();
                 }
@@ -94,6 +93,21 @@ public class REM {
                 }
             }
         });
+    }
+
+    /**
+     * 是否已经登录成功
+     */
+    public static boolean isLoggedIn() {
+        return EMClient.getInstance().isLoggedInBefore();
+    }
+
+    /**
+     * 登录成功之后, 调用此方法初始化一些数据
+     */
+    public static void initOnLoggedIn() {
+        EMClient.getInstance().groupManager().loadAllGroups();
+        EMClient.getInstance().chatManager().loadAllConversations();
     }
 
 }

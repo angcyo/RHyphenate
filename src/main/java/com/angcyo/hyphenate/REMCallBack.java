@@ -4,6 +4,7 @@ import com.angcyo.uiview.utils.ThreadExecutor;
 import com.hyphenate.EMCallBack;
 
 /**
+ * 环信的回调在子线程, 这里封装一下在主线程回调
  * Created by angcyo on 2018-03-06.
  */
 

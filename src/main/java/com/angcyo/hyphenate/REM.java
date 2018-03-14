@@ -88,6 +88,7 @@ public class REM {
                 if (isError) {
                     subscriber.onError(new RException(code, message));
                 } else {
+                    callOnLoggedOut();
                     subscriber.onNext("");
                     subscriber.onCompleted();
                 }
@@ -108,6 +109,24 @@ public class REM {
     public static void initOnLoggedIn() {
         EMClient.getInstance().groupManager().loadAllGroups();
         EMClient.getInstance().chatManager().loadAllConversations();
+    }
+
+    /**
+     * 登出操作后的处理
+     */
+    public static void callOnLoggedOut() {
+        try {
+            EMClient.getInstance().callManager().endCall();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取当前登录成功的用户名
+     */
+    public static String getCurrentUserName() {
+        return EMClient.getInstance().getCurrentUser();
     }
 
 }

@@ -73,4 +73,20 @@ public class REMConversation {
         return list;
     }
 
+    /**
+     * 删除和某个user会话，如果需要保留聊天记录，传false
+     */
+    public static void deleteConversation(String username, boolean deleteMessage /*清空聊天记录*/) {
+        //删除和某个user会话，如果需要保留聊天记录，传false
+        EMClient.getInstance().chatManager().deleteConversation(username, deleteMessage);
+    }
+
+    /**
+     * 删除当前会话的某条聊天记录
+     */
+    public static void removeMessage(String msgId, String username) {
+        //删除当前会话的某条聊天记录
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        conversation.removeMessage(msgId);
+    }
 }

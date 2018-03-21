@@ -3,6 +3,7 @@ package com.angcyo.hyphenate;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,11 +24,13 @@ public class REMContacts {
     /**
      * 获取所有联系人
      */
-    public static void getAllContactsFromServer() {
+    public static List<String> getAllContactsFromServer() {
         try {
             List<String> usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
+            return usernames;
         } catch (HyphenateException e) {
             e.printStackTrace();
+            return new ArrayList<>();
         }
     }
 

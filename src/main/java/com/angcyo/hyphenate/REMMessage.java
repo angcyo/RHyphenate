@@ -2,7 +2,10 @@ package com.angcyo.hyphenate;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+
+import java.util.List;
 
 import static com.hyphenate.chat.EMMessage.ChatType;
 
@@ -127,6 +130,21 @@ public class REMMessage {
             message.setChatType(EMMessage.ChatType.GroupChat);
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
+    }
+
+    public static List<EMMessage> loadMoreMsgFromDB(String username, String startMsgId, int pagesize) {
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        //获取startMsgId之前的pagesize条消息，此方法获取的messages SDK会自动存入到此会话中，APP中无需再次把获取到的messages添加到会话中
+        List<EMMessage> messages = conversation.loadMoreMsgFromDB(startMsgId, pagesize);
+        return messages;
+    }
+
+    public static List<EMMessage> getAllMessages(String username) {
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        //获取此会话的所有消息
+        List<EMMessage> messages = conversation.getAllMessages();
+        //SDK初始化加载的聊天记录为20条，到顶时需要去DB里获取更多
+        return messages;
     }
 
 

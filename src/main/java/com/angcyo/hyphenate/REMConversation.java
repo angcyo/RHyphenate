@@ -58,6 +58,10 @@ public class REMConversation {
     /**
      * 获取所有会话列表
      */
+    public static List<EMConversation> getAllConversations() {
+        return loadConversationList();
+    }
+
     public static List<EMConversation> loadConversationList() {
         // get all conversations
         Map<String, EMConversation> conversations = EMClient.getInstance().chatManager().getAllConversations();
@@ -105,6 +109,65 @@ public class REMConversation {
 
     public static REMConversation instance() {
         return Holder.instance;
+    }
+
+    /**
+     * 获取会话未读消息数量
+     */
+    public static int getUnreadMsgCount(String username) {
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        return conversation.getUnreadMsgCount();
+    }
+
+    /**
+     * 获取所有会话的未读消息数
+     */
+    public static int getAllUnreadMsgCount() {
+        return EMClient.getInstance().chatManager().getUnreadMessageCount();
+    }
+
+    /**
+     * 清空未读消息数
+     */
+    public static void markAllMessagesAsRead(String username) {
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        //指定会话消息未读数清零
+        conversation.markAllMessagesAsRead();
+        //把一条消息置为已读
+        //conversation.markMessageAsRead(messageId);
+        ////所有未读消息数清零
+        //EMClient.getInstance().chatManager().markAllConversationsAsRead();
+    }
+
+    /**
+     * 指定消息已读
+     */
+    public static void markMessageAsRead(String username, String messageId) {
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        //指定会话消息未读数清零
+        //conversation.markAllMessagesAsRead();
+        //把一条消息置为已读
+        conversation.markMessageAsRead(messageId);
+        ////所有未读消息数清零
+        //EMClient.getInstance().chatManager().markAllConversationsAsRead();
+    }
+
+    /**
+     * 清空所有会话的未读消息数
+     */
+    public static void markAllConversationsAsRead() {
+        EMClient.getInstance().chatManager().markAllConversationsAsRead();
+    }
+
+    /**
+     * 获取会话所有消息数量
+     */
+    public static int getAllMsgCount(String username) {
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        //获取此会话在本地的所有的消息数量
+        return conversation.getAllMsgCount();
+        //如果只是获取当前在内存的消息数量，调用
+        // conversation.getAllMessages().size();
     }
 
     /**

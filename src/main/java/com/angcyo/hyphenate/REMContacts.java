@@ -1,10 +1,15 @@
 package com.angcyo.hyphenate;
 
+import com.angcyo.uiview.net.RFunc;
+import com.angcyo.uiview.net.RSubscriber;
+import com.angcyo.uiview.net.Rx;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.functions.Func1;
 
 /**
  * Copyright (C) 2016,深圳市红鸟网络科技股份有限公司 All rights reserved.
@@ -24,14 +29,25 @@ public class REMContacts {
     /**
      * 获取所有联系人
      */
-    public static List<String> getAllContactsFromServer() {
-        try {
-            List<String> usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
-            return usernames;
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+    public static void getAllContactsFromServer(final Func1<List<String>, String> onResult) {
+        Rx.base(new RFunc<List<String>>() {
+            @Override
+            public List<String> onFuncCall() {
+                try {
+                    List<String> usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
+                    return usernames;
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    return new ArrayList<>();
+                }
+            }
+        }, new RSubscriber<List<String>>() {
+            @Override
+            public void onSucceed(List<String> bean) {
+                super.onSucceed(bean);
+                onResult.call(bean);
+            }
+        });
     }
 
     /**

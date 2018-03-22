@@ -51,48 +51,125 @@ public class REMContacts {
     }
 
     /**
+     * 是否是联系人
+     */
+    public static void isContacts(final String username, final Func1<Boolean, String> onResult) {
+        Rx.base(new RFunc<Boolean>() {
+            @Override
+            public Boolean onFuncCall() {
+                try {
+                    List<String> usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
+                    return usernames.contains(username);
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    return Boolean.FALSE;
+                }
+            }
+        }, new RSubscriber<Boolean>() {
+            @Override
+            public void onSucceed(Boolean bean) {
+                super.onSucceed(bean);
+                onResult.call(bean);
+            }
+        });
+    }
+
+    /**
      * 添加好友
      */
-    public static void addContact(String toAddUsername /*需要添加的用户名*/, String reason /*验证消息*/) {
+    public static void addContact(final String toAddUsername /*需要添加的用户名*/, final String reason /*验证消息*/, final Func1<String, String> onResult) {
         //参数为要添加的好友的username和添加理由
-        try {
-            EMClient.getInstance().contactManager().addContact(toAddUsername, reason);
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-        }
+        Rx.base(new RFunc<String>() {
+            @Override
+            public String onFuncCall() {
+                try {
+                    EMClient.getInstance().contactManager().addContact(toAddUsername, reason);
+                    return toAddUsername;
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        }, new RSubscriber<String>() {
+            @Override
+            public void onSucceed(String bean) {
+                super.onSucceed(bean);
+                onResult.call(bean);
+            }
+        });
     }
 
     /**
      * 删除好友
      */
-    public static void deleteContact(String username) {
-        try {
-            EMClient.getInstance().contactManager().deleteContact(username);
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-        }
+    public static void deleteContact(final String username, final Func1<String, String> onResult) {
+        Rx.base(new RFunc<String>() {
+            @Override
+            public String onFuncCall() {
+                try {
+                    EMClient.getInstance().contactManager().deleteContact(username);
+                    return username;
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        }, new RSubscriber<String>() {
+            @Override
+            public void onSucceed(String bean) {
+                super.onSucceed(bean);
+                onResult.call(bean);
+            }
+        });
     }
 
     /**
      * 同意好友请求
      */
-    public static void acceptInvitation(String username) {
-        try {
-            EMClient.getInstance().contactManager().acceptInvitation(username);
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-        }
+    public static void acceptInvitation(final String username, final Func1<String, String> onResult) {
+        Rx.base(new RFunc<String>() {
+            @Override
+            public String onFuncCall() {
+                try {
+                    EMClient.getInstance().contactManager().acceptInvitation(username);
+                    return username;
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        }, new RSubscriber<String>() {
+            @Override
+            public void onSucceed(String bean) {
+                super.onSucceed(bean);
+                onResult.call(bean);
+            }
+        });
     }
 
     /**
      * 拒绝好友请求
      */
-    public static void declineInvitation(String username) {
-        try {
-            EMClient.getInstance().contactManager().declineInvitation(username);
-        } catch (HyphenateException e) {
-            e.printStackTrace();
-        }
+    public static void declineInvitation(final String username, final Func1<String, String> onResult) {
+        Rx.base(new RFunc<String>() {
+            @Override
+            public String onFuncCall() {
+                try {
+                    EMClient.getInstance().contactManager().declineInvitation(username);
+                    return username;
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        }, new RSubscriber<String>() {
+            @Override
+            public void onSucceed(String bean) {
+                super.onSucceed(bean);
+                onResult.call(bean);
+            }
+        });
+
     }
 
     public static REMContacts instance() {

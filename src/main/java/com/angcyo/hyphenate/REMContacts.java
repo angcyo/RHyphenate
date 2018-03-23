@@ -1,14 +1,19 @@
 package com.angcyo.hyphenate;
 
+import com.angcyo.library.utils.L;
+import com.angcyo.realm.RRealm;
+import com.angcyo.realm.bean.ContactInviteRealm;
 import com.angcyo.uiview.net.RFunc;
 import com.angcyo.uiview.net.RSubscriber;
 import com.angcyo.uiview.net.Rx;
+import com.hyphenate.EMContactListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import rx.functions.Func1;
 
 /**
@@ -24,6 +29,53 @@ import rx.functions.Func1;
  */
 public class REMContacts {
     private REMContacts() {
+    }
+
+    public void init() {
+        initContactListener();
+    }
+
+    private void initContactListener() {
+        EMClient.getInstance().contactManager().setContactListener(new EMContactListener() {
+
+            @Override
+            public void onContactInvited(final String username, final String reason) {
+                //收到好友邀请
+                L.i("call: onContactInvited([username, reason])-> " + username + ":" + reason);
+
+                RRealm.exe(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.insertOrUpdate(new ContactInviteRealm(username, reason));
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFriendRequestAccepted(String username) {
+                //好友请求被同意
+                L.i("call: onFriendRequestAccepted([username])-> " + username);
+            }
+
+            @Override
+            public void onFriendRequestDeclined(String username) {
+                //好友请求被拒绝
+                L.i("call: onFriendRequestDeclined([username])-> " + username);
+            }
+
+            @Override
+            public void onContactDeleted(String username) {
+                //被删除时回调此方法
+                L.i("call: onContactDeleted([username])-> " + username);
+            }
+
+            @Override
+            public void onContactAdded(String username) {
+                //增加了联系人时回调此方法
+                L.i("call: onContactAdded([username])-> " + username);
+            }
+        });
     }
 
     /**

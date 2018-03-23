@@ -2,6 +2,7 @@ package com.angcyo.hyphenate;
 
 import android.app.Application;
 
+import com.angcyo.realm.RRealm;
 import com.angcyo.uiview.net.Func;
 import com.angcyo.uiview.net.RException;
 import com.angcyo.uiview.net.RSubscriber;
@@ -28,6 +29,9 @@ import rx.Observer;
  */
 public class REM {
     public static void init(Application application, boolean debug) {
+        //初始化数据库
+        RRealm.init(application, true);
+
         EMOptions options = new EMOptions();
         // 默认添加好友时，是不需要验证的，改成需要验证
         options.setAcceptInvitationAlways(false);
@@ -46,6 +50,10 @@ public class REM {
         EMClient.getInstance().setDebugMode(debug);
 
         registerConnectionListener();
+
+        //联系人相关
+        REMContacts.instance().init();
+
     }
 
     private static void registerConnectionListener() {
@@ -60,6 +68,7 @@ public class REM {
             public void onDisconnected(int error) {
                 if (error == EMError.USER_REMOVED) {
                     // 显示帐号已经被移除
+
                 } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
                     // 显示帐号在其他设备登录
                 } else {

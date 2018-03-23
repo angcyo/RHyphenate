@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import rx.Subscription;
 import rx.functions.Func1;
 
 /**
@@ -43,10 +44,20 @@ public class REMContacts {
                 //收到好友邀请
                 L.i("call: onContactInvited([username, reason])-> " + username + ":" + reason);
 
-                RRealm.exe(new Realm.Transaction() {
+                isContacts(username, new Func1<Boolean, String>() {
                     @Override
-                    public void execute(Realm realm) {
-                        realm.insertOrUpdate(new ContactInviteRealm(username, reason));
+                    public String call(Boolean aBoolean) {
+                        if (aBoolean) {
+                            L.w(username + "已经是您的好友");
+                        } else {
+                            RRealm.exe(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    realm.insertOrUpdate(new ContactInviteRealm(username, reason, REM.getCurrentUserName()));
+                                }
+                            });
+                        }
+                        return "";
                     }
                 });
 
@@ -81,8 +92,8 @@ public class REMContacts {
     /**
      * 获取所有联系人
      */
-    public static void getAllContactsFromServer(final Func1<List<String>, String> onResult) {
-        Rx.base(new RFunc<List<String>>() {
+    public static Subscription getAllContactsFromServer(final Func1<List<String>, String> onResult) {
+        return Rx.base(new RFunc<List<String>>() {
             @Override
             public List<String> onFuncCall() {
                 try {
@@ -105,8 +116,8 @@ public class REMContacts {
     /**
      * 是否是联系人
      */
-    public static void isContacts(final String username, final Func1<Boolean, String> onResult) {
-        Rx.base(new RFunc<Boolean>() {
+    public static Subscription isContacts(final String username, final Func1<Boolean, String> onResult) {
+        return Rx.base(new RFunc<Boolean>() {
             @Override
             public Boolean onFuncCall() {
                 try {
@@ -129,9 +140,9 @@ public class REMContacts {
     /**
      * 添加好友
      */
-    public static void addContact(final String toAddUsername /*需要添加的用户名*/, final String reason /*验证消息*/, final Func1<String, String> onResult) {
+    public static Subscription addContact(final String toAddUsername /*需要添加的用户名*/, final String reason /*验证消息*/, final Func1<String, String> onResult) {
         //参数为要添加的好友的username和添加理由
-        Rx.base(new RFunc<String>() {
+        return Rx.base(new RFunc<String>() {
             @Override
             public String onFuncCall() {
                 try {
@@ -154,8 +165,8 @@ public class REMContacts {
     /**
      * 删除好友
      */
-    public static void deleteContact(final String username, final Func1<String, String> onResult) {
-        Rx.base(new RFunc<String>() {
+    public static Subscription deleteContact(final String username, final Func1<String, String> onResult) {
+        return Rx.base(new RFunc<String>() {
             @Override
             public String onFuncCall() {
                 try {
@@ -178,8 +189,8 @@ public class REMContacts {
     /**
      * 同意好友请求
      */
-    public static void acceptInvitation(final String username, final Func1<String, String> onResult) {
-        Rx.base(new RFunc<String>() {
+    public static Subscription acceptInvitation(final String username, final Func1<String, String> onResult) {
+        return Rx.base(new RFunc<String>() {
             @Override
             public String onFuncCall() {
                 try {
@@ -202,8 +213,8 @@ public class REMContacts {
     /**
      * 拒绝好友请求
      */
-    public static void declineInvitation(final String username, final Func1<String, String> onResult) {
-        Rx.base(new RFunc<String>() {
+    public static Subscription declineInvitation(final String username, final Func1<String, String> onResult) {
+        return Rx.base(new RFunc<String>() {
             @Override
             public String onFuncCall() {
                 try {

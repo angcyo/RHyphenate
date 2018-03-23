@@ -11,14 +11,16 @@ public class ContactInviteRealm extends RealmObject {
     @PrimaryKey
     private String username;
     private String reason;
+    private String to_username;//谁应该接受此消息
     private int statue = 0;//操作状态,0未操作, 1同意, 2拒绝
 
     public ContactInviteRealm() {
     }
 
-    public ContactInviteRealm(String username, String reason) {
+    public ContactInviteRealm(String username, String reason, String to_username) {
         this.username = username;
         this.reason = reason;
+        this.to_username = to_username;
     }
 
     public int getStatue() {
@@ -43,5 +45,13 @@ public class ContactInviteRealm extends RealmObject {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getTo_username() {
+        return to_username;
+    }
+
+    public void setTo_username(String to_username) {
+        this.to_username = to_username;
     }
 }

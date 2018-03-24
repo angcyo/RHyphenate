@@ -42,7 +42,7 @@ public class REMContacts {
             @Override
             public void onContactInvited(final String username, final String reason) {
                 //收到好友邀请
-                L.i("call: onContactInvited([username, reason])-> " + username + ":" + reason);
+                L.i("REMContacts 收到好友邀请-> " + username + ":" + reason);
 
                 isContacts(username, new Func1<Boolean, String>() {
                     @Override
@@ -66,25 +66,25 @@ public class REMContacts {
             @Override
             public void onFriendRequestAccepted(String username) {
                 //好友请求被同意
-                L.i("call: onFriendRequestAccepted([username])-> " + username);
+                L.i("REMContacts 好友请求被同意-> " + username);
             }
 
             @Override
             public void onFriendRequestDeclined(String username) {
                 //好友请求被拒绝
-                L.i("call: onFriendRequestDeclined([username])-> " + username);
+                L.i("REMContacts 好友请求被拒绝-> " + username);
             }
 
             @Override
             public void onContactDeleted(String username) {
                 //被删除时回调此方法
-                L.i("call: onContactDeleted([username])-> " + username);
+                L.i("REMContacts 被删除联系人-> " + username);
             }
 
             @Override
             public void onContactAdded(String username) {
                 //增加了联系人时回调此方法
-                L.i("call: onContactAdded([username])-> " + username);
+                L.i("REMContacts 添加联系人-> " + username);
             }
         });
     }

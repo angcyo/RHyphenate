@@ -54,6 +54,8 @@ public class REM {
         //联系人相关
         REMContacts.instance().init();
 
+        //消息相关
+        REMMessage.instance().init();
     }
 
     private static void registerConnectionListener() {

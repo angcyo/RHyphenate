@@ -3,6 +3,7 @@ package com.angcyo.hyphenate;
 import com.angcyo.library.utils.L;
 import com.angcyo.realm.RRealm;
 import com.angcyo.realm.bean.ContactInviteRealm;
+import com.angcyo.uiview.manager.RNotifier;
 import com.angcyo.uiview.net.RFunc;
 import com.angcyo.uiview.net.RSubscriber;
 import com.angcyo.uiview.net.Rx;
@@ -43,6 +44,7 @@ public class REMContacts {
             public void onContactInvited(final String username, final String reason) {
                 //收到好友邀请
                 L.i("REMContacts 收到好友邀请-> " + username + ":" + reason);
+                RNotifier.instance().vibrateAndPlayTone();
 
                 isContacts(username, new Func1<Boolean, String>() {
                     @Override

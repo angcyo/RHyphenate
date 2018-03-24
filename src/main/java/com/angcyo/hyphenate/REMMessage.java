@@ -3,6 +3,7 @@ package com.angcyo.hyphenate;
 import android.text.TextUtils;
 
 import com.angcyo.library.utils.L;
+import com.angcyo.uiview.manager.RNotifier;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
@@ -203,6 +204,11 @@ public class REMMessage {
         static REMMessage instance = new REMMessage();
     }
 
+    /**
+     * 当前正在聊天的用户名
+     */
+    public String currentChatUserName = "";
+
     public void init() {
         initMessageListener();
     }
@@ -216,7 +222,18 @@ public class REMMessage {
             @Override
             public void onMessageReceived(List<EMMessage> messages) {
                 //收到消息
-                L.i("REMMessage 收到消息->" + messages.size());
+                L.i("REMMessage 收到消息->" + messages.size()
+                        + " from:" + messages.get(0).getFrom() + " to" + messages.get(0).getTo());
+
+                try {
+                    //正在聊天的人, 发来了消息, 不触发通知提示
+                    if (TextUtils.equals(currentChatUserName, messages.get(messages.size() - 1).getFrom())) {
+                    } else {
+                        RNotifier.instance().vibrateAndPlayTone();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -256,5 +273,13 @@ public class REMMessage {
         if (msgListener != null) {
             EMClient.getInstance().chatManager().removeMessageListener(msgListener);
         }
+    }
+
+    public static void addMessageListener(EMMessageListener listener) {
+        EMClient.getInstance().chatManager().addMessageListener(listener);
+    }
+
+    public static void removeMessageListener(EMMessageListener listener) {
+        EMClient.getInstance().chatManager().removeMessageListener(listener);
     }
 }

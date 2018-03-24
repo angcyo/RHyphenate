@@ -1,5 +1,7 @@
 package com.angcyo.hyphenate;
 
+import android.text.TextUtils;
+
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
@@ -21,6 +23,14 @@ import static com.hyphenate.chat.EMMessage.ChatType;
  * Version: 1.0.0
  */
 public class REMMessage {
+
+    public static final String M_TYPE_TXT = "TXT";
+    public static final String M_TYPE_IMAGE = "IMAGE";
+    public static final String M_TYPE_VIDEO = "VIDEO";
+    public static final String M_TYPE_LOCATION = "LOCATION";
+    public static final String M_TYPE_VOICE = "VOICE";
+    public static final String M_TYPE_FILE = "FILE";
+    public static final String M_TYPE_CMD = "CMD";
 
     /**
      * 发送扩展消息
@@ -147,5 +157,29 @@ public class REMMessage {
         return messages;
     }
 
+    public static String getEMessageType(EMMessage message) {
+        String type = "";
+        if (message.getType() == EMMessage.Type.TXT) {
+            String ex_type = message.getStringAttribute("ex_type", "");
+            if (TextUtils.isEmpty(ex_type)) {
+                type = M_TYPE_TXT;
+            } else {
+                type = ex_type;
+            }
+        } else if (message.getType() == EMMessage.Type.IMAGE) {
+            type = M_TYPE_IMAGE;
+        } else if (message.getType() == EMMessage.Type.LOCATION) {
+            type = M_TYPE_LOCATION;
+        } else if (message.getType() == EMMessage.Type.VOICE) {
+            type = M_TYPE_VOICE;
+        } else if (message.getType() == EMMessage.Type.VIDEO) {
+            type = M_TYPE_VIDEO;
+        } else if (message.getType() == EMMessage.Type.FILE) {
+            type = M_TYPE_FILE;
+        } else if (message.getType() == EMMessage.Type.CMD) {
+            type = M_TYPE_CMD;
+        }
+        return type;
+    }
 
 }

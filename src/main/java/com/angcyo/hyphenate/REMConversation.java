@@ -104,6 +104,10 @@ public class REMConversation {
     public static void removeMessage(String msgId, String username) {
         //删除当前会话的某条聊天记录
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        if (conversation == null) {
+            return;
+        }
+
         conversation.removeMessage(msgId);
     }
 
@@ -116,6 +120,9 @@ public class REMConversation {
      */
     public static int getUnreadMsgCount(String username) {
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        if (conversation == null) {
+            return 0;
+        }
         return conversation.getUnreadMsgCount();
     }
 
@@ -131,6 +138,9 @@ public class REMConversation {
      */
     public static void markAllMessagesAsRead(String username) {
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        if (conversation == null) {
+            return;
+        }
         //指定会话消息未读数清零
         conversation.markAllMessagesAsRead();
         //把一条消息置为已读
@@ -144,6 +154,9 @@ public class REMConversation {
      */
     public static void markMessageAsRead(String username, String messageId) {
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        if (conversation == null) {
+            return;
+        }
         //指定会话消息未读数清零
         //conversation.markAllMessagesAsRead();
         //把一条消息置为已读
@@ -164,6 +177,9 @@ public class REMConversation {
      */
     public static int getAllMsgCount(String username) {
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(username);
+        if (conversation == null) {
+            return 0;
+        }
         //获取此会话在本地的所有的消息数量
         return conversation.getAllMsgCount();
         //如果只是获取当前在内存的消息数量，调用

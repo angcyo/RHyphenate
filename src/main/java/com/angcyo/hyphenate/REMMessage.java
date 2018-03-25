@@ -277,8 +277,15 @@ public class REMMessage {
                         + " from:" + messages.get(0).getFrom() + " to" + messages.get(0).getTo());
 
                 try {
+                    EMMessage lastMessage = messages.get(messages.size() - 1);
                     //正在聊天的人, 发来了消息, 不触发通知提示
-                    if (TextUtils.equals(currentChatUserName, messages.get(messages.size() - 1).getFrom())) {
+//                    if (lastMessage.getChatType() == ChatType.Chat) {
+//
+//                    } else {
+//                        TextUtils.equals(it.conversationId(), username)
+//                    }
+//
+                    if (TextUtils.equals(currentChatUserName, lastMessage.conversationId())) {
                     } else {
                         RNotifier.instance().vibrateAndPlayTone();
                     }

@@ -174,4 +174,11 @@ public class REM {
         return EMClient.getInstance().getCurrentUser();
     }
 
+    /**
+     * 环信服务器是否连接
+     */
+    public static boolean isConnected() {
+        return EMClient.getInstance().isConnected();
+    }
+
 }

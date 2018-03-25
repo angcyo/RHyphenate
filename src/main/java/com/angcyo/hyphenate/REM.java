@@ -56,6 +56,9 @@ public class REM {
 
         //消息相关
         REMMessage.instance().init();
+
+        //群组相关
+        REMGroupManager.instance().init();
     }
 
     private static void registerConnectionListener() {

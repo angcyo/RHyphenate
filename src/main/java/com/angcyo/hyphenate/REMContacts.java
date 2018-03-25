@@ -35,6 +35,14 @@ public class REMContacts {
 
     public void init() {
         initContactListener();
+
+        //先拉一次联系人
+        getAllContactsFromServer(new Func1<List<String>, String>() {
+            @Override
+            public String call(List<String> strings) {
+                return null;
+            }
+        });
     }
 
     private void initContactListener() {

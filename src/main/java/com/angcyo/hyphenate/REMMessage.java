@@ -9,6 +9,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMTextMessageBody;
 
 import java.util.List;
 
@@ -34,6 +35,9 @@ public class REMMessage {
     public static final String M_TYPE_VOICE = "VOICE";
     public static final String M_TYPE_FILE = "FILE";
     public static final String M_TYPE_CMD = "CMD";
+    public static final String EX_TYPE = "ex_type";
+    public static final String EX_DATA = "ex_data";
+
 
     /**
      * 发送扩展消息
@@ -168,10 +172,13 @@ public class REMMessage {
         return messages;
     }
 
+    /**
+     * 获取消息类型
+     */
     public static String getEMessageType(EMMessage message) {
         String type = "";
         if (message.getType() == EMMessage.Type.TXT) {
-            String ex_type = message.getStringAttribute("ex_type", "");
+            String ex_type = message.getStringAttribute(EX_TYPE, "");
             if (TextUtils.isEmpty(ex_type)) {
                 type = M_TYPE_TXT;
             } else {
@@ -191,6 +198,50 @@ public class REMMessage {
             type = M_TYPE_CMD;
         }
         return type;
+    }
+
+    /**
+     * 获取消息摘要
+     */
+    public static String getMessageDigest(EMMessage message) {
+        String digest = "";
+        switch (message.getType()) {
+            case LOCATION:
+                if (message.direct() == EMMessage.Direct.RECEIVE) {
+                    digest = "[%1$s的位置]";
+                    digest = String.format(digest, message.getFrom());
+                    return digest;
+                } else {
+                    digest = "[我的位置]";
+                }
+                break;
+            case IMAGE:
+                digest = "[图片]";
+                break;
+            case VOICE:
+                digest = "[语音]";
+                break;
+            case VIDEO:
+                digest = "[视频]";
+                break;
+            case TXT:
+                EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
+                String ex_type = message.getStringAttribute(EX_TYPE, "");
+                if (TextUtils.isEmpty(ex_type)) {
+                    digest = txtBody.getMessage();
+                } else {
+                    String ex_data = message.getStringAttribute(EX_DATA, "");
+                    digest = "[扩展消息]" + ex_data;
+                }
+                break;
+            case FILE:
+                digest = "[文件]";
+                break;
+            default:
+                digest = "[不支持的格式]";
+                break;
+        }
+        return digest;
     }
 
     private REMMessage() {

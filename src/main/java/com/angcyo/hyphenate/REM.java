@@ -145,7 +145,7 @@ public class REM {
      * 是否已经登录成功
      */
     public static boolean isLoggedIn() {
-        return EMClient.getInstance().isLoggedInBefore();
+        return EMClient.getInstance().isLoggedInBefore() && EMClient.getInstance().isConnected();
     }
 
     /**

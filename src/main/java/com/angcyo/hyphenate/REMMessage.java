@@ -48,7 +48,7 @@ public class REMMessage {
         // 增加自己特定的属性
         message.setAttribute("attribute1", "value");
         message.setAttribute("attribute2", true);
-        EMClient.getInstance().chatManager().sendMessage(message);
+        EMClient.getInstance().chatManager().saveMessage(message);
 
         if (isGroup)
             message.setChatType(ChatType.GroupChat);
@@ -67,7 +67,7 @@ public class REMMessage {
         EMMessage cmdMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
 
         //支持单聊和群聊，默认单聊，如果是群聊添加下面这行
-        cmdMsg.setChatType(ChatType.GroupChat);
+        // cmdMsg.setChatType(ChatType.GroupChat);
         //String action = action;//action可以自定义
         EMCmdMessageBody cmdBody = new EMCmdMessageBody(action);
         //String toUsername = "test1";//发送给某个人
@@ -75,7 +75,7 @@ public class REMMessage {
             cmdMsg.setChatType(ChatType.GroupChat);
         cmdMsg.setTo(toChatUsername);
         cmdMsg.addBody(cmdBody);
-        EMClient.getInstance().chatManager().sendMessage(cmdMsg);
+        EMClient.getInstance().chatManager().saveMessage(cmdMsg);
         return cmdMsg;
     }
 
@@ -87,7 +87,7 @@ public class REMMessage {
         // 如果是群聊，设置chattype，默认是单聊
         if (isGroup)
             message.setChatType(ChatType.GroupChat);
-        EMClient.getInstance().chatManager().sendMessage(message);
+        EMClient.getInstance().chatManager().saveMessage(message);
         return message;
     }
 
@@ -100,7 +100,7 @@ public class REMMessage {
         //如果是群聊，设置chattype，默认是单聊
         if (isGroup)
             message.setChatType(ChatType.GroupChat);
-        EMClient.getInstance().chatManager().sendMessage(message);
+        EMClient.getInstance().chatManager().saveMessage(message);
         return message;
     }
 
@@ -113,7 +113,7 @@ public class REMMessage {
         //如果是群聊，设置chattype，默认是单聊
         if (isGroup)
             message.setChatType(EMMessage.ChatType.GroupChat);
-        EMClient.getInstance().chatManager().sendMessage(message);
+        EMClient.getInstance().chatManager().saveMessage(message);
         return message;
     }
 
@@ -126,7 +126,7 @@ public class REMMessage {
         //如果是群聊，设置chattype，默认是单聊
         if (isGroup)
             message.setChatType(EMMessage.ChatType.GroupChat);
-        EMClient.getInstance().chatManager().sendMessage(message);
+        EMClient.getInstance().chatManager().saveMessage(message);
         return message;
     }
 
@@ -139,7 +139,7 @@ public class REMMessage {
         //如果是群聊，设置chattype，默认是单聊
         if (isGroup)
             message.setChatType(EMMessage.ChatType.GroupChat);
-        EMClient.getInstance().chatManager().sendMessage(message);
+        EMClient.getInstance().chatManager().saveMessage(message);
         return message;
     }
 
@@ -153,7 +153,7 @@ public class REMMessage {
         if (isGroup)
             message.setChatType(EMMessage.ChatType.GroupChat);
         //发送消息
-        EMClient.getInstance().chatManager().sendMessage(message);
+        EMClient.getInstance().chatManager().saveMessage(message);
         return message;
     }
 

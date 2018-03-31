@@ -1,20 +1,26 @@
 package com.angcyo.hyphenate;
 
 import android.app.Application;
+import android.support.annotation.StringRes;
+import android.text.TextUtils;
 
 import com.angcyo.realm.RRealm;
+import com.angcyo.uiview.RApplication;
 import com.angcyo.uiview.net.Func;
 import com.angcyo.uiview.net.RException;
 import com.angcyo.uiview.net.RSubscriber;
 import com.angcyo.uiview.net.Rx;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
+import com.hyphenate.chat.EMCheckType;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.exceptions.HyphenateException;
 
 import rx.Observable;
 import rx.Observer;
+import rx.functions.Action1;
+import rx.functions.Func1;
 
 /**
  * Copyright (C) 2016,深圳市红鸟网络科技股份有限公司 All rights reserved.
@@ -181,4 +187,83 @@ public class REM {
         return EMClient.getInstance().isConnected();
     }
 
+    public static void check(String currentUsername, String currentPassword, final Action1<String> onResult) {
+        final StringBuilder builder = new StringBuilder("开始诊断:\n");
+        EMClient.getInstance().check(currentUsername, currentPassword, new EMClient.CheckResultListener() {
+            @Override
+            public void onResult(int type, int result, String desc) {
+                switch (type) {
+                    case EMCheckType.ACCOUNT_VALIDATION: // Account validation.
+                        if (result != EMError.EM_NO_ERROR) {
+                            updateResultOnUiThread(builder, R.string.check_result_account_validate_fail, result, desc);
+                        }
+                        Rx.base(new Runnable() {
+                            @Override
+                            public void run() {
+                                onResult.call(builder.toString());
+                            }
+                        });
+                        break;
+                    case EMCheckType.GET_DNS_LIST_FROM_SERVER: // Get dns list from server.
+                        if (result == EMError.EM_NO_ERROR) {
+                            updateResultOnUiThread(builder, R.string.check_result_get_dns_list_success, 0, null);
+                        } else {
+                            updateResultOnUiThread(builder, R.string.check_result_get_dns_list_fail, result, desc);
+                        }
+                        Rx.base(new Runnable() {
+                            @Override
+                            public void run() {
+                                onResult.call(builder.toString());
+                            }
+                        });
+                        break;
+                    case EMCheckType.GET_TOKEN_FROM_SERVER: // Get token from server.
+                        if (result == EMError.EM_NO_ERROR) {
+                            updateResultOnUiThread(builder, R.string.check_result_get_token_success, 0, null);
+                        } else {
+                            updateResultOnUiThread(builder, R.string.check_result_get_token_fail, result, desc);
+                        }
+                        Rx.base(new Runnable() {
+                            @Override
+                            public void run() {
+                                onResult.call(builder.toString());
+                            }
+                        });
+                        break;
+                    case EMCheckType.DO_LOGIN: // User login
+                        if (result == EMError.EM_NO_ERROR) {
+                            updateResultOnUiThread(builder, R.string.check_result_login_success, 0, null);
+                        } else {
+                            updateResultOnUiThread(builder, R.string.check_result_login_fail, result, desc);
+                        }
+                        Rx.base(new Runnable() {
+                            @Override
+                            public void run() {
+                                onResult.call(builder.toString());
+                            }
+                        });
+                        break;
+                    case EMCheckType.DO_LOGOUT: // User logout
+                        if (result == EMError.EM_NO_ERROR) {
+                            updateResultOnUiThread(builder, R.string.check_result_logout_success, 0, null);
+                        } else {
+                            updateResultOnUiThread(builder, R.string.check_result_logout_fail, result, desc);
+                        }
+                        Rx.base(new Runnable() {
+                            @Override
+                            public void run() {
+                                onResult.call(builder.toString());
+                            }
+                        });
+                        break;
+                }
+            }
+        });
+    }
+
+    private static void updateResultOnUiThread(final StringBuilder builder, @StringRes int resId, int result, String desc) {
+        builder.append(String.format(RApplication.getApp().getResources().getString(resId), result == EMError.EM_NO_ERROR ? "" : ", error code: " + result,
+                TextUtils.isEmpty(desc) ? "" : ", desc: " + desc))
+                .append("\n");
+    }
 }

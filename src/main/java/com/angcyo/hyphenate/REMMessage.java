@@ -37,7 +37,14 @@ public class REMMessage {
     public static final String M_TYPE_CMD = "CMD";
     public static final String EX_TYPE = "ex_type";
     public static final String EX_DATA = "ex_data";
+    /**
+     * 当前正在聊天的用户名
+     */
+    public String currentChatUserName = "";
+    EMMessageListener msgListener;
 
+    private REMMessage() {
+    }
 
     /**
      * 发送扩展消息
@@ -50,8 +57,11 @@ public class REMMessage {
         message.setAttribute("attribute2", true);
         EMClient.getInstance().chatManager().saveMessage(message);
 
-        if (isGroup)
+        if (isGroup) {
             message.setChatType(ChatType.GroupChat);
+        } else {
+            message.setChatType(ChatType.Chat);
+        }
 
         //接收消息的时候获取到扩展属性
         //获取自定义的属性，第2个参数为没有此定义的属性时返回的默认值
@@ -71,8 +81,11 @@ public class REMMessage {
         //String action = action;//action可以自定义
         EMCmdMessageBody cmdBody = new EMCmdMessageBody(action);
         //String toUsername = "test1";//发送给某个人
-        if (isGroup)
+        if (isGroup) {
             cmdMsg.setChatType(ChatType.GroupChat);
+        } else {
+            cmdMsg.setChatType(ChatType.Chat);
+        }
         cmdMsg.setTo(toChatUsername);
         cmdMsg.addBody(cmdBody);
         EMClient.getInstance().chatManager().saveMessage(cmdMsg);
@@ -85,9 +98,16 @@ public class REMMessage {
     public static EMMessage sendFileMessage(String filePath, String toChatUsername, boolean isGroup) {
         EMMessage message = EMMessage.createFileSendMessage(filePath, toChatUsername);
         // 如果是群聊，设置chattype，默认是单聊
-        if (isGroup)
+        if (isGroup) {
             message.setChatType(ChatType.GroupChat);
+<<<<<<< HEAD
         EMClient.getInstance().chatManager().saveMessage(message);
+=======
+        } else {
+            message.setChatType(ChatType.Chat);
+        }
+        EMClient.getInstance().chatManager().sendMessage(message);
+>>>>>>> fix base
         return message;
     }
 
@@ -98,9 +118,16 @@ public class REMMessage {
         //latitude为纬度，longitude为经度，locationAddress为具体位置内容
         EMMessage message = EMMessage.createLocationSendMessage(latitude, longitude, locationAddress, toChatUsername);
         //如果是群聊，设置chattype，默认是单聊
-        if (isGroup)
+        if (isGroup) {
             message.setChatType(ChatType.GroupChat);
+<<<<<<< HEAD
         EMClient.getInstance().chatManager().saveMessage(message);
+=======
+        } else {
+            message.setChatType(ChatType.Chat);
+        }
+        EMClient.getInstance().chatManager().sendMessage(message);
+>>>>>>> fix base
         return message;
     }
 
@@ -111,9 +138,18 @@ public class REMMessage {
         //imagePath为图片本地路径，false为不发送原图（默认超过100k的图片会压缩后发给对方），需要发送原图传true
         EMMessage message = EMMessage.createImageSendMessage(imagePath, isOrigin, toChatUsername);
         //如果是群聊，设置chattype，默认是单聊
+<<<<<<< HEAD
         if (isGroup)
             message.setChatType(EMMessage.ChatType.GroupChat);
         EMClient.getInstance().chatManager().saveMessage(message);
+=======
+        if (isGroup) {
+            message.setChatType(ChatType.GroupChat);
+        } else {
+            message.setChatType(ChatType.Chat);
+        }
+        EMClient.getInstance().chatManager().sendMessage(message);
+>>>>>>> fix base
         return message;
     }
 
@@ -124,9 +160,18 @@ public class REMMessage {
         //videoPath为视频本地路径，thumbPath为视频预览图路径，videoLength为视频时间长度
         EMMessage message = EMMessage.createVideoSendMessage(videoPath, thumbPath, videoLength, toChatUsername);
         //如果是群聊，设置chattype，默认是单聊
+<<<<<<< HEAD
         if (isGroup)
             message.setChatType(EMMessage.ChatType.GroupChat);
         EMClient.getInstance().chatManager().saveMessage(message);
+=======
+        if (isGroup) {
+            message.setChatType(ChatType.GroupChat);
+        } else {
+            message.setChatType(ChatType.Chat);
+        }
+        EMClient.getInstance().chatManager().sendMessage(message);
+>>>>>>> fix base
         return message;
     }
 
@@ -137,9 +182,18 @@ public class REMMessage {
         //filePath为语音文件路径，length为录音时间(秒)
         EMMessage message = EMMessage.createVoiceSendMessage(filePath, length, toChatUsername);
         //如果是群聊，设置chattype，默认是单聊
+<<<<<<< HEAD
         if (isGroup)
             message.setChatType(EMMessage.ChatType.GroupChat);
         EMClient.getInstance().chatManager().saveMessage(message);
+=======
+        if (isGroup) {
+            message.setChatType(ChatType.GroupChat);
+        } else {
+            message.setChatType(ChatType.Chat);
+        }
+        EMClient.getInstance().chatManager().sendMessage(message);
+>>>>>>> fix base
         return message;
     }
 
@@ -150,8 +204,11 @@ public class REMMessage {
         //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
         EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
         //如果是群聊，设置chattype，默认是单聊
-        if (isGroup)
-            message.setChatType(EMMessage.ChatType.GroupChat);
+        if (isGroup) {
+            message.setChatType(ChatType.GroupChat);
+        } else {
+            message.setChatType(ChatType.Chat);
+        }
         //发送消息
         EMClient.getInstance().chatManager().saveMessage(message);
         return message;
@@ -244,27 +301,21 @@ public class REMMessage {
         return digest;
     }
 
-    private REMMessage() {
-    }
-
     public static REMMessage instance() {
         return Holder.instance;
     }
 
-    private static class Holder {
-        static REMMessage instance = new REMMessage();
+    public static void addMessageListener(EMMessageListener listener) {
+        EMClient.getInstance().chatManager().addMessageListener(listener);
     }
 
-    /**
-     * 当前正在聊天的用户名
-     */
-    public String currentChatUserName = "";
+    public static void removeMessageListener(EMMessageListener listener) {
+        EMClient.getInstance().chatManager().removeMessageListener(listener);
+    }
 
     public void init() {
         initMessageListener();
     }
-
-    EMMessageListener msgListener;
 
     private void initMessageListener() {
         removeMessageListener();
@@ -333,11 +384,7 @@ public class REMMessage {
         }
     }
 
-    public static void addMessageListener(EMMessageListener listener) {
-        EMClient.getInstance().chatManager().addMessageListener(listener);
-    }
-
-    public static void removeMessageListener(EMMessageListener listener) {
-        EMClient.getInstance().chatManager().removeMessageListener(listener);
+    private static class Holder {
+        static REMMessage instance = new REMMessage();
     }
 }

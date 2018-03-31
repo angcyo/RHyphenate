@@ -100,14 +100,10 @@ public class REMMessage {
         // 如果是群聊，设置chattype，默认是单聊
         if (isGroup) {
             message.setChatType(ChatType.GroupChat);
-<<<<<<< HEAD
-        EMClient.getInstance().chatManager().saveMessage(message);
-=======
         } else {
             message.setChatType(ChatType.Chat);
         }
-        EMClient.getInstance().chatManager().sendMessage(message);
->>>>>>> fix base
+        EMClient.getInstance().chatManager().saveMessage(message);
         return message;
     }
 
@@ -120,14 +116,10 @@ public class REMMessage {
         //如果是群聊，设置chattype，默认是单聊
         if (isGroup) {
             message.setChatType(ChatType.GroupChat);
-<<<<<<< HEAD
-        EMClient.getInstance().chatManager().saveMessage(message);
-=======
         } else {
             message.setChatType(ChatType.Chat);
         }
-        EMClient.getInstance().chatManager().sendMessage(message);
->>>>>>> fix base
+        EMClient.getInstance().chatManager().saveMessage(message);
         return message;
     }
 
@@ -138,18 +130,12 @@ public class REMMessage {
         //imagePath为图片本地路径，false为不发送原图（默认超过100k的图片会压缩后发给对方），需要发送原图传true
         EMMessage message = EMMessage.createImageSendMessage(imagePath, isOrigin, toChatUsername);
         //如果是群聊，设置chattype，默认是单聊
-<<<<<<< HEAD
-        if (isGroup)
-            message.setChatType(EMMessage.ChatType.GroupChat);
-        EMClient.getInstance().chatManager().saveMessage(message);
-=======
         if (isGroup) {
-            message.setChatType(ChatType.GroupChat);
+            message.setChatType(EMMessage.ChatType.GroupChat);
         } else {
             message.setChatType(ChatType.Chat);
         }
-        EMClient.getInstance().chatManager().sendMessage(message);
->>>>>>> fix base
+        EMClient.getInstance().chatManager().saveMessage(message);
         return message;
     }
 
@@ -160,18 +146,14 @@ public class REMMessage {
         //videoPath为视频本地路径，thumbPath为视频预览图路径，videoLength为视频时间长度
         EMMessage message = EMMessage.createVideoSendMessage(videoPath, thumbPath, videoLength, toChatUsername);
         //如果是群聊，设置chattype，默认是单聊
-<<<<<<< HEAD
         if (isGroup)
             message.setChatType(EMMessage.ChatType.GroupChat);
-        EMClient.getInstance().chatManager().saveMessage(message);
-=======
         if (isGroup) {
             message.setChatType(ChatType.GroupChat);
         } else {
             message.setChatType(ChatType.Chat);
         }
-        EMClient.getInstance().chatManager().sendMessage(message);
->>>>>>> fix base
+        EMClient.getInstance().chatManager().saveMessage(message);
         return message;
     }
 
@@ -182,18 +164,12 @@ public class REMMessage {
         //filePath为语音文件路径，length为录音时间(秒)
         EMMessage message = EMMessage.createVoiceSendMessage(filePath, length, toChatUsername);
         //如果是群聊，设置chattype，默认是单聊
-<<<<<<< HEAD
-        if (isGroup)
-            message.setChatType(EMMessage.ChatType.GroupChat);
-        EMClient.getInstance().chatManager().saveMessage(message);
-=======
         if (isGroup) {
             message.setChatType(ChatType.GroupChat);
         } else {
             message.setChatType(ChatType.Chat);
         }
-        EMClient.getInstance().chatManager().sendMessage(message);
->>>>>>> fix base
+        EMClient.getInstance().chatManager().saveMessage(message);
         return message;
     }
 

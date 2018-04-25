@@ -55,7 +55,7 @@ public class REMMessage {
         // 增加自己特定的属性
         message.setAttribute("attribute1", "value");
         message.setAttribute("attribute2", true);
-        EMClient.getInstance().chatManager().saveMessage(message);
+        EMClient.getInstance().chatManager().sendMessage(message);
 
         if (isGroup) {
             message.setChatType(ChatType.GroupChat);
@@ -88,7 +88,7 @@ public class REMMessage {
         }
         cmdMsg.setTo(toChatUsername);
         cmdMsg.addBody(cmdBody);
-        EMClient.getInstance().chatManager().saveMessage(cmdMsg);
+        EMClient.getInstance().chatManager().sendMessage(cmdMsg);
         return cmdMsg;
     }
 
@@ -103,7 +103,7 @@ public class REMMessage {
         } else {
             message.setChatType(ChatType.Chat);
         }
-        EMClient.getInstance().chatManager().saveMessage(message);
+        EMClient.getInstance().chatManager().sendMessage(message);
         return message;
     }
 
@@ -119,7 +119,7 @@ public class REMMessage {
         } else {
             message.setChatType(ChatType.Chat);
         }
-        EMClient.getInstance().chatManager().saveMessage(message);
+        EMClient.getInstance().chatManager().sendMessage(message);
         return message;
     }
 
@@ -135,7 +135,7 @@ public class REMMessage {
         } else {
             message.setChatType(ChatType.Chat);
         }
-        EMClient.getInstance().chatManager().saveMessage(message);
+        EMClient.getInstance().chatManager().sendMessage(message);
         return message;
     }
 
@@ -153,7 +153,7 @@ public class REMMessage {
         } else {
             message.setChatType(ChatType.Chat);
         }
-        EMClient.getInstance().chatManager().saveMessage(message);
+        EMClient.getInstance().chatManager().sendMessage(message);
         return message;
     }
 
@@ -169,7 +169,7 @@ public class REMMessage {
         } else {
             message.setChatType(ChatType.Chat);
         }
-        EMClient.getInstance().chatManager().saveMessage(message);
+        EMClient.getInstance().chatManager().sendMessage(message);
         return message;
     }
 
@@ -186,7 +186,7 @@ public class REMMessage {
             message.setChatType(ChatType.Chat);
         }
         //发送消息
-        EMClient.getInstance().chatManager().saveMessage(message);
+        EMClient.getInstance().chatManager().sendMessage(message);
         return message;
     }
 
